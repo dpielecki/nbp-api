@@ -2,6 +2,7 @@ package io.github.dpielecki.nbpapi.exchangeRates;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,11 @@ public class ExchangeRatesController {
     @Autowired
     private ExchangeRatesService exchangeRatesService;
 
-    private final OkHttpClient httpClient = new OkHttpClient();
     private final String baseUrl = "http://api.nbp.pl/api/exchangerates/rates/";
+    private final OkHttpClient httpClient = new OkHttpClient.Builder()
+        .readTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(10, TimeUnit.SECONDS)
+        .build();
 
     public ExchangeRatesController(ExchangeRatesService exchangeRatesService) {
         this.exchangeRatesService = exchangeRatesService;
