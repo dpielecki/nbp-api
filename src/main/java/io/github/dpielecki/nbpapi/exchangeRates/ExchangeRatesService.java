@@ -1,6 +1,7 @@
 package io.github.dpielecki.nbpapi.exchangeRates;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,7 +32,7 @@ public class ExchangeRatesService {
             }
         }
 
-        return String.format("{\"minAverageValue\": %s, \"maxAverageValue\": %s}", minRate, maxRate);
+        return String.format(Locale.US, "{\"minAverageValue\": %.2f, \"maxAverageValue\": %.2f}", minRate, maxRate);
     }
 
     public Double getMajorDifference(JSONObject jsonData) throws IOException {

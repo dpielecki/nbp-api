@@ -1,6 +1,7 @@
 package io.github.dpielecki.nbpapi.exchangeRates;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class ExchangeRatesController {
 
         Request request = buildGetRequest(String.format("A/%s/%s", currency, date));
 
-        return exchangeRatesService.getAverage(fetchData(request)).toString();
+        return String.format(Locale.US, "%.2f", exchangeRatesService.getAverage(fetchData(request)));
     }
 
     @GetMapping(value = "/extremes/{currency}/{quotations}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -82,6 +83,6 @@ public class ExchangeRatesController {
     
         Request request = buildGetRequest(String.format("C/%s/last/%s", currency, quotations));
 
-        return exchangeRatesService.getMajorDifference(fetchData(request)).toString();
+        return String.format(Locale.US, "%.2f", exchangeRatesService.getMajorDifference(fetchData(request)));
     }
 }
