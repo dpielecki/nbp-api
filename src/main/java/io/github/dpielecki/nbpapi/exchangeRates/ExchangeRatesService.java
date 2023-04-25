@@ -44,6 +44,10 @@ public class ExchangeRatesService {
     }
 
     public String getExtremes(String currency, int quotations) throws IOException {
+        if (quotations < 1 || quotations > 255) {
+            throw new IllegalArgumentException("Number of last quotations must be in range 1-255");
+        }
+    
         Request request = buildGetRequest(String.format("A/%s/last/%s", currency, quotations));
         JSONArray rates = fetchData(request).getJSONArray("rates");
 
@@ -64,6 +68,10 @@ public class ExchangeRatesService {
     }
 
     public Double getMajorDifference(String currency, int quotations) throws IOException {
+        if (quotations < 1 || quotations > 255) {
+            throw new IllegalArgumentException("Number of last quotations must be in range 1-255");
+        }
+
         Request request = buildGetRequest(String.format("C/%s/last/%s", currency, quotations));
         JSONArray rates = fetchData(request).getJSONArray("rates");
 
