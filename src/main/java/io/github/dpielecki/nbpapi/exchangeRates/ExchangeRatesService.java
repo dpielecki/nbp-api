@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 @Service
 public class ExchangeRatesService {
@@ -23,10 +24,14 @@ public class ExchangeRatesService {
     }
 
     private JSONObject fetchData(Request request) throws IOException {
-        return new JSONObject(httpClient.newCall(request).execute()
-            .body()
-            .string()
-        );
+        Response response = httpClient.newCall(request).execute();
+        if (response.code() == 400) {
+            throw new IllegalArgumentException("Invalid request.");
+        }
+        else if (response.code() == 404) {
+            throw new NoDataException("No data for given parameters.");
+        }
+        return new JSONObject(response.body().string());
     }
 
     public Double getAverage(String currency, String date) throws IOException {

@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,11 +27,17 @@ public class ExchangeRatesController {
 
     @GetMapping(value = "/extremes/{currency}/{quotations}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getExtremes(@PathVariable("currency") String currency, @PathVariable("quotations") int quotations) throws IOException {
+        if (quotations < 0 || quotations > 255) {
+            throw new IllegalArgumentException("Number of last quotations must be in range 1-255");
+        }
         return exchangeRatesService.getExtremes(currency, quotations);
     }
 
     @GetMapping("/majordifference/{currency}/{quotations}")
     public String getMajorDifference(@PathVariable("currency") String currency, @PathVariable("quotations") int quotations) throws IOException {
+        if (quotations < 0 || quotations > 255) {
+            throw new IllegalArgumentException("Number of last quotations must be in range 1-255");
+        }
         return exchangeRatesService.getMajorDifference(currency, quotations).toString();
     }
 }
